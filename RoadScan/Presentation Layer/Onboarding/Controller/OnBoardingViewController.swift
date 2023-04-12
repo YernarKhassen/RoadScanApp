@@ -13,7 +13,8 @@ final class OnBoardingViewController: UIViewController{
     }()
     
     //MARK: - Properties
-    var sections: [Section] = [.init(section: .onboarding, rows: [.first, .second, .third])]
+    private var viewModel = OnBoardingVewModel()
+    var sections: [Section] = []
     
     // MARK: - LifeCycle
     override func viewDidLoad() {
@@ -28,6 +29,7 @@ final class OnBoardingViewController: UIViewController{
         configureCollectionView()
         setupColors()
         makeConstraints()
+        setupSections()
     }
     
     func setupViews() {
@@ -52,17 +54,26 @@ final class OnBoardingViewController: UIViewController{
             make.height.equalToSuperview()
         }
     }
+    
+    func setupSections() {
+        sections = viewModel.setupSections()
+    }
 }
 
 //MARK: - OnBoardingCollectionViewCellDelegate
 
 extension OnBoardingViewController: OnBoardingCollectionViewCellDelegate {
     func cell(_ cell: UICollectionViewCell, nextButtonDidTap button: UIButton) {
-        guard let index = collectionView.indexPath(for: cell)?.row else { return }
-        if (index < 2) {
-            collectionView.scrollToItem(at: IndexPath(row: index+1, section: 0), at: .right, animated: true)
-        } else {
-            collectionView.scrollToItem(at: IndexPath(row: 0, section: 0), at: .centeredHorizontally, animated: true)
+        guard let index = collectionView.indexPath(for: cell) else { return }
+        
+        let row = sections[index.section].rows[index.row]
+        switch row {
+        case .first, .second:
+            viewModel.changeItemIndex(collectionView, index)
+        case .third:
+            let tabbar = MainBuilder.build()
+            tabbar.modalPresentationStyle = .fullScreen
+            navigationController?.present(tabbar, animated: true)
         }
     }
 }

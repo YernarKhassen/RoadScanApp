@@ -22,7 +22,7 @@ final class MainTabBarController: UITabBarController {
                        title: "Карта",
                        image: UIImage(named: "Map")),
             
-            generateVC(viewController: SettingsViewController(),
+            generateVC(viewController: UnavailableViewController(),
                        title: "Настройки",
                        image: UIImage(named: "Settings"))
         ]
