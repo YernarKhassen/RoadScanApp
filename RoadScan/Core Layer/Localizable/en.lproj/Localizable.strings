@@ -1,5 +1,9 @@
+//MARK: - Onboarding
 "next" = "";
 "allow" = "";
 "firstOnboardingText" = "";
 "secondOnboardingText" = "";
 "thirdOnboardingText" = "";
+
+//MARK: - Unavailable
+"unavailable" = "";
