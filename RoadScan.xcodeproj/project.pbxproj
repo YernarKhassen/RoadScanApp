@@ -24,6 +24,8 @@
 		708E1A8D29981CEF00164E9A /* OnBoardingViewController+CollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 708E1A8C29981CEF00164E9A /* OnBoardingViewController+CollectionView.swift */; };
 		708E1A9329981E0500164E9A /* OnBoardingCollectionViewCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 708E1A9229981E0500164E9A /* OnBoardingCollectionViewCellViewModel.swift */; };
 		70A1F70829E75054002FDC29 /* GoogleMapsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70A1F70729E75054002FDC29 /* GoogleMapsService.swift */; };
+		70A1F70A29E75692002FDC29 /* OnBoardingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70A1F70929E75692002FDC29 /* OnBoardingViewModel.swift */; };
+		70A1F70D29E757D7002FDC29 /* MainBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70A1F70C29E757D7002FDC29 /* MainBuilder.swift */; };
 		9488BE6C643A1EF13626E9BB /* Pods_RoadScan.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D88533AC902EACF0BB56E666 /* Pods_RoadScan.framework */; };
 		B9BE4DC529E18D5D009C2D02 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = B9BE4DC429E18D5D009C2D02 /* Alamofire */; };
 		B9BE4DDC29E1A0EA009C2D02 /* NetworkRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9BE4DD629E1A0EA009C2D02 /* NetworkRequest.swift */; };
@@ -69,6 +71,8 @@
 		708E1A8C29981CEF00164E9A /* OnBoardingViewController+CollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "OnBoardingViewController+CollectionView.swift"; sourceTree = "<group>"; };
 		708E1A9229981E0500164E9A /* OnBoardingCollectionViewCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnBoardingCollectionViewCellViewModel.swift; sourceTree = "<group>"; };
 		70A1F70729E75054002FDC29 /* GoogleMapsService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoogleMapsService.swift; sourceTree = "<group>"; };
+		70A1F70929E75692002FDC29 /* OnBoardingViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnBoardingViewModel.swift; sourceTree = "<group>"; };
+		70A1F70C29E757D7002FDC29 /* MainBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainBuilder.swift; sourceTree = "<group>"; };
 		77297612BDF42821D724C162 /* Pods-RoadScan.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RoadScan.debug.xcconfig"; path = "Target Support Files/Pods-RoadScan/Pods-RoadScan.debug.xcconfig"; sourceTree = "<group>"; };
 		B9BE4DB929E18B84009C2D02 /* NetworkService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkService.swift; sourceTree = "<group>"; };
 		B9BE4DBF29E18C92009C2D02 /* NetworkRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkRequest.swift; sourceTree = "<group>"; };
@@ -223,6 +227,7 @@
 			isa = PBXGroup;
 			children = (
 				708E1A9229981E0500164E9A /* OnBoardingCollectionViewCellViewModel.swift */,
+				70A1F70929E75692002FDC29 /* OnBoardingViewModel.swift */,
 			);
 			path = VIewModels;
 			sourceTree = "<group>";
@@ -233,6 +238,14 @@
 				70A1F70729E75054002FDC29 /* GoogleMapsService.swift */,
 			);
 			path = GoogleMapsService;
+			sourceTree = "<group>";
+		};
+		70A1F70B29E757C9002FDC29 /* Builder */ = {
+			isa = PBXGroup;
+			children = (
+				70A1F70C29E757D7002FDC29 /* MainBuilder.swift */,
+			);
+			path = Builder;
 			sourceTree = "<group>";
 		};
 		B017D85B023F1876A9DD90C9 /* Pods */ = {
@@ -354,6 +367,7 @@
 		D97A238D29D1E1D800B8AB0A /* TabBar */ = {
 			isa = PBXGroup;
 			children = (
+				70A1F70B29E757C9002FDC29 /* Builder */,
 				D97A238E29D1E1D800B8AB0A /* View */,
 			);
 			path = TabBar;
@@ -596,6 +610,7 @@
 				B9BE4DDD29E1A0EA009C2D02 /* NetworkConstants.swift in Sources */,
 				B9BE4DDC29E1A0EA009C2D02 /* NetworkRequest.swift in Sources */,
 				D9A2C33D299E739000B8AEA5 /* OnboardingConstants.swift in Sources */,
+				70A1F70A29E75692002FDC29 /* OnBoardingViewModel.swift in Sources */,
 				D97A23A229D1E22600B8AB0A /* SegmentedControlExtension.swift in Sources */,
 				7005AFA929A7E5A300ABEB66 /* String.swift in Sources */,
 				D9B99E4329DF0F30006ABE05 /* HomeBuilder.swift in Sources */,
@@ -606,6 +621,7 @@
 				7019C63E299531D500E9379E /* AppDelegate.swift in Sources */,
 				D97A239429D1E1D800B8AB0A /* SettingsViewController.swift in Sources */,
 				D97A239D29D1E20900B8AB0A /* LocationService.swift in Sources */,
+				70A1F70D29E757D7002FDC29 /* MainBuilder.swift in Sources */,
 				B9BE4DE229E1A2FB009C2D02 /* HomeViewModels.swift in Sources */,
 				708E1A8B29981AC500164E9A /* OnBoardingViewController+Section.swift in Sources */,
 				D97A239029D1E1D800B8AB0A /* HomeViewController.swift in Sources */,
