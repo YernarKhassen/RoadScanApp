@@ -1,12 +1,6 @@
-//
-//  SegmentedControlExtension.swift
-//  InRoad
-//
-//  Created by Dinmukhamed on 19.02.2023.
-//
-
 import Foundation
 import UIKit
+
 extension UIImage{
     class func getSegRect(color: CGColor, andSize size: CGSize) -> UIImage{
         UIGraphicsBeginImageContextWithOptions(size, false, 1.0)
@@ -19,6 +13,7 @@ extension UIImage{
         return rectangleImage!
     }
 }
+
 extension UISegmentedControl{
    
     func removeBorder(){

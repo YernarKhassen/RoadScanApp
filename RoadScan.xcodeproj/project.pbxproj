@@ -23,6 +23,7 @@
 		708E1A8B29981AC500164E9A /* OnBoardingViewController+Section.swift in Sources */ = {isa = PBXBuildFile; fileRef = 708E1A8A29981AC500164E9A /* OnBoardingViewController+Section.swift */; };
 		708E1A8D29981CEF00164E9A /* OnBoardingViewController+CollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 708E1A8C29981CEF00164E9A /* OnBoardingViewController+CollectionView.swift */; };
 		708E1A9329981E0500164E9A /* OnBoardingCollectionViewCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 708E1A9229981E0500164E9A /* OnBoardingCollectionViewCellViewModel.swift */; };
+		70A1F70829E75054002FDC29 /* GoogleMapsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70A1F70729E75054002FDC29 /* GoogleMapsService.swift */; };
 		9488BE6C643A1EF13626E9BB /* Pods_RoadScan.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D88533AC902EACF0BB56E666 /* Pods_RoadScan.framework */; };
 		B9BE4DC529E18D5D009C2D02 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = B9BE4DC429E18D5D009C2D02 /* Alamofire */; };
 		B9BE4DDC29E1A0EA009C2D02 /* NetworkRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9BE4DD629E1A0EA009C2D02 /* NetworkRequest.swift */; };
@@ -67,6 +68,7 @@
 		708E1A8A29981AC500164E9A /* OnBoardingViewController+Section.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "OnBoardingViewController+Section.swift"; sourceTree = "<group>"; };
 		708E1A8C29981CEF00164E9A /* OnBoardingViewController+CollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "OnBoardingViewController+CollectionView.swift"; sourceTree = "<group>"; };
 		708E1A9229981E0500164E9A /* OnBoardingCollectionViewCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnBoardingCollectionViewCellViewModel.swift; sourceTree = "<group>"; };
+		70A1F70729E75054002FDC29 /* GoogleMapsService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoogleMapsService.swift; sourceTree = "<group>"; };
 		77297612BDF42821D724C162 /* Pods-RoadScan.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RoadScan.debug.xcconfig"; path = "Target Support Files/Pods-RoadScan/Pods-RoadScan.debug.xcconfig"; sourceTree = "<group>"; };
 		B9BE4DB929E18B84009C2D02 /* NetworkService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkService.swift; sourceTree = "<group>"; };
 		B9BE4DBF29E18C92009C2D02 /* NetworkRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkRequest.swift; sourceTree = "<group>"; };
@@ -149,6 +151,7 @@
 		700EF6C8299D19E300101B63 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
+				70A1F70629E75046002FDC29 /* GoogleMapsService */,
 				D97A239B29D1E20900B8AB0A /* CoreMotionService */,
 				D97A239829D1E20900B8AB0A /* Fonts */,
 				D97A239629D1E20900B8AB0A /* LocationService */,
@@ -222,6 +225,14 @@
 				708E1A9229981E0500164E9A /* OnBoardingCollectionViewCellViewModel.swift */,
 			);
 			path = VIewModels;
+			sourceTree = "<group>";
+		};
+		70A1F70629E75046002FDC29 /* GoogleMapsService */ = {
+			isa = PBXGroup;
+			children = (
+				70A1F70729E75054002FDC29 /* GoogleMapsService.swift */,
+			);
+			path = GoogleMapsService;
 			sourceTree = "<group>";
 		};
 		B017D85B023F1876A9DD90C9 /* Pods */ = {
@@ -599,6 +610,7 @@
 				708E1A8B29981AC500164E9A /* OnBoardingViewController+Section.swift in Sources */,
 				D97A239029D1E1D800B8AB0A /* HomeViewController.swift in Sources */,
 				D9B99E4029DF0F0B006ABE05 /* HomeViewModel.swift in Sources */,
+				70A1F70829E75054002FDC29 /* GoogleMapsService.swift in Sources */,
 				700EF6CA299D19EF00101B63 /* UICollectionView.swift in Sources */,
 				7019C655299536AC00E9379E /* OnBoardingCollectionViewCell.swift in Sources */,
 				D9A2C33A299E728B00B8AEA5 /* UIColor.swift in Sources */,

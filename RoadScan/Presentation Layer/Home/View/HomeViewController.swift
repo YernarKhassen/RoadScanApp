@@ -4,13 +4,15 @@ import SnapKit
 import CoreMotion
 
 
-final class HomeViewController: UIViewController {
+final class HomeViewController: UIViewController, AlertProtocol {
     
     private let locationService = LocationService()
     private let coreMotionService = CoreMotionService()
+    private let googleMapsService = GoogleMapsService()
     private let motionManager = CMMotionManager()
     private let homeBuilder = HomeBuilder()
     private let viewModel = HomeViewModel()
+    private let locationManager = CLLocationManager()
     
     var mapView = GMSMapView()
     
@@ -21,6 +23,7 @@ final class HomeViewController: UIViewController {
     private lazy var plusZoom: UIButton = {
         let plusZoom = UIButton()
         plusZoom.setBackgroundImage(UIImage(named: "Plus"), for: .normal)
+        plusZoom.addTarget(self, action: #selector(onTapPlus), for: .touchUpInside)
         
         return plusZoom
     }()
@@ -28,6 +31,7 @@ final class HomeViewController: UIViewController {
     private lazy var minusZoom: UIButton = {
         let minusZoom = UIButton()
         minusZoom.setBackgroundImage(UIImage(named: "Minus"), for: .normal)
+        minusZoom.addTarget(self, action: #selector(onTapMinus), for: .touchUpInside)
         
         return minusZoom
     }()
@@ -56,7 +60,7 @@ final class HomeViewController: UIViewController {
                                                                                            green: 0.459,
                                                                                            blue: 0.459,
                                                                                            alpha: 1)],
-                                                                                           for: .normal)
+                                          for: .normal)
         segControl.selectedSegmentIndex = 0
         return segControl
     }()
@@ -64,6 +68,7 @@ final class HomeViewController: UIViewController {
     override func loadView() {
         super.loadView()
         locationService.delegate = self
+        locationService.delegateAlert = self
         fetchDangerList()
     }
     
@@ -72,12 +77,12 @@ final class HomeViewController: UIViewController {
         super.viewDidLoad()
         view.backgroundColor = .white
         
-       
+        
         let camera = GMSCameraPosition.camera(withLatitude: 0.0,
                                               longitude:   0.0,
                                               zoom:         0)
         mapView = GMSMapView.map(withFrame: view.frame,
-                                     camera: camera)
+                                 camera: camera)
         mapView.camera = camera
         
         self.view.addSubview(mapView)
@@ -113,7 +118,8 @@ final class HomeViewController: UIViewController {
     
     // нужно удалить метод или обьекти если не юзается
     private func setUpGoogleMaps(){
-        
+        mapView = googleMapsService.setupMapView(view: view)
+        view.addSubview(mapView)
     }
     // constraint не должны быть много чем 54
     private func makeConstraints() {
@@ -149,14 +155,34 @@ final class HomeViewController: UIViewController {
     
     // создать extetion для view.addArangedSubviews []
     private func initialize() {
-        view.addSubview(viewToSC)
-        view.addSubview(plusZoom)
-        view.addSubview(minusZoom)
-        view.addSubview(myLocation)
+        [viewToSC, plusZoom, minusZoom, myLocation].forEach {
+            view.addSubview($0)
+        }
+    }
+    
+    func grantPermission() {
+        let alert = UIAlertController(title: "Доступ к местоположению запрещен", message: "Пожалуйста перейдите в настройки своего телефона, чтобы предоставить разрешение на доступ к вашему местоположению", preferredStyle: .alert)
+        let okAction = UIAlertAction(title: "OK", style: .default)
+        { (action) in
+            self.locationManager.requestWhenInUseAuthorization()
+            self.locationManager.startUpdatingLocation()
+        }
+        
+        alert.addAction(okAction)
+        present(alert, animated: true, completion: nil)
     }
     
     @objc func showMyLocation() {
         print("my location")
+        googleMapsService.getMyCameraPosition(mapView: mapView)
+    }
+    
+    @objc func onTapPlus() {
+        googleMapsService.getZoomInValue(mapView: mapView)
+    }
+    
+    @objc func onTapMinus() {
+        googleMapsService.getZoomOutValue(mapView: mapView)
     }
 }
 
@@ -185,7 +211,7 @@ extension HomeViewController: LocationServiceProtocol {
                                                 latitude: location.lat,
                                                 longitude: location.lon,
                                                 danger_level: "1")
-
+        
         viewModel.postDangerZone(param: currentDangerZone)
         let camera = GMSCameraPosition.camera(withLatitude: location.lat,
                                               longitude:   location.lon,
@@ -196,20 +222,20 @@ extension HomeViewController: LocationServiceProtocol {
 }
 
 extension HomeViewController {
-        func binding() {
-            viewModel.updateViewData = { [self] in
-                DispatchQueue.main.async {
-                    for element in self.viewModel.dangerList {
-                        self.homeBuilder.addPinCoordinate(lat: element.latitude,
-                                                          lon: element.longitude,
-                                                          mapview: self.mapView)
-                    }
+    func binding() {
+        viewModel.updateViewData = { [self] in
+            DispatchQueue.main.async {
+                for element in self.viewModel.dangerList {
+                    self.homeBuilder.addPinCoordinate(lat: element.latitude,
+                                                      lon: element.longitude,
+                                                      mapview: self.mapView)
                 }
             }
         }
+    }
     
     func fetchDangerList() {
         viewModel.fetchDangerList()
     }
-
+    
 }
