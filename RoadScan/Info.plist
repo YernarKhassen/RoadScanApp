@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>Пожалуйста предоставьте доступ к своему местоположению</string>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>Пожалуйста предоставьте доступ к своему местоположению</string>
+	<key>UIAppFonts</key>
+	<array>
+		<string>Stolzl-Regular.ttf</string>
+		<string>Stolzl-Medium.ttf</string>
+	</array>
+</dict>
+</plist>
