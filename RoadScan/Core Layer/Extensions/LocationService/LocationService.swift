@@ -16,15 +16,10 @@ protocol LocationServiceProtocol {
     func getCurrentLocation(with location: CurrentLocationModel)
 }
 
-protocol AlertProtocol {
-    func grantPermission()
-}
-
 final class LocationService: NSObject {
     private var locationManager: CLLocationManager = CLLocationManager()
     
     var delegate: LocationServiceProtocol?
-    var delegateAlert: AlertProtocol?
     
     override init() {
         super.init()
@@ -33,20 +28,8 @@ final class LocationService: NSObject {
         locationManager.startUpdatingLocation()
     }
     
-    func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
-            if status == .authorizedWhenInUse {
-                print("yes")
-            } else if status == .denied {
-                delegateAlert?.grantPermission()
-            }
-
-        }
     func requestLocation(rate : Double) {
         locationManager.requestLocation()
-    }
-    
-    func requestToAccess() {
-        locationManager.requestWhenInUseAuthorization()
     }
 }
 
@@ -67,6 +50,3 @@ extension LocationService: CLLocationManagerDelegate {
     }
 
 }
-
-
-

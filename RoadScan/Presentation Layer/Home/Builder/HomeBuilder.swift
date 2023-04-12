@@ -37,7 +37,8 @@ final class HomeBuilder: HomeBuilderInputProtocol, HomeBuilderOutputProtocol {
     func addPinCoordinate(lat : Double, lon : Double, mapview : GMSMapView) {
         stackOfPins.append(.init(latitude: lat , longitude: lon, nameOfLocation: "unknown"))
         setPins(with: mapview)
-        drawCoordinates(with: mapview)
+//        drawCoordinates(with: mapview)
+        print(stackOfPins)
     }
     
     // MARK: - Adema ozegertedy

@@ -4,12 +4,13 @@ import SnapKit
 import CoreMotion
 
 
-final class HomeViewController: UIViewController, AlertProtocol {
+final class HomeViewController: UIViewController {
+    
     private let locationService = LocationService()
     private let coreMotionService = CoreMotionService()
-    private let googleMapsService = GoogleMapsService()
-    private let locationManager = CLLocationManager()
-
+    private let motionManager = CMMotionManager()
+    private let homeBuilder = HomeBuilder()
+    private let viewModel = HomeViewModel()
     
     var mapView = GMSMapView()
     
@@ -20,7 +21,6 @@ final class HomeViewController: UIViewController, AlertProtocol {
     private lazy var plusZoom: UIButton = {
         let plusZoom = UIButton()
         plusZoom.setBackgroundImage(UIImage(named: "Plus"), for: .normal)
-        plusZoom.addTarget(self, action: #selector(onTapPlus), for: .touchUpInside)
         
         return plusZoom
     }()
@@ -28,7 +28,7 @@ final class HomeViewController: UIViewController, AlertProtocol {
     private lazy var minusZoom: UIButton = {
         let minusZoom = UIButton()
         minusZoom.setBackgroundImage(UIImage(named: "Minus"), for: .normal)
-        minusZoom.addTarget(self, action: #selector(onTapMinus), for: .touchUpInside)
+        
         return minusZoom
     }()
     
@@ -64,7 +64,7 @@ final class HomeViewController: UIViewController, AlertProtocol {
     override func loadView() {
         super.loadView()
         locationService.delegate = self
-        locationService.delegateAlert = self
+        fetchDangerList()
     }
     
     
@@ -83,6 +83,7 @@ final class HomeViewController: UIViewController, AlertProtocol {
         self.view.addSubview(mapView)
         setup()
         coreMotionService.speedDetecting()
+        binding()
     }
     
     private func setup() {
@@ -112,8 +113,7 @@ final class HomeViewController: UIViewController, AlertProtocol {
     
     // нужно удалить метод или обьекти если не юзается
     private func setUpGoogleMaps(){
-        mapView = googleMapsService.setupMapView(view: view)
-        view.addSubview(mapView)
+        
     }
     // constraint не должны быть много чем 54
     private func makeConstraints() {
@@ -149,54 +149,22 @@ final class HomeViewController: UIViewController, AlertProtocol {
     
     // создать extetion для view.addArangedSubviews []
     private func initialize() {
-        [viewToSC, plusZoom, minusZoom, myLocation].forEach {
-            view.addSubview($0)
-        }
-    }
-    
-    func grantPermission() {
-        let alert = UIAlertController(title: "Доступ к местоположению запрещен", message: "Пожалуйста перейдите в настройки своего телефона, чтобы предоставить разрешение на доступ к вашему местоположению", preferredStyle: .alert)
-        let okAction = UIAlertAction(title: "OK", style: .default)
-        { (action) in
-            self.locationManager.requestWhenInUseAuthorization()
-            self.locationManager.startUpdatingLocation()
-        }
-        
-        alert.addAction(okAction)
-        present(alert, animated: true, completion: nil)
+        view.addSubview(viewToSC)
+        view.addSubview(plusZoom)
+        view.addSubview(minusZoom)
+        view.addSubview(myLocation)
     }
     
     @objc func showMyLocation() {
         print("my location")
-        googleMapsService.getMyCameraPosition(mapView: mapView)
-    }
-    
-    @objc func onTapPlus() {
-        googleMapsService.getZoomInValue(mapView: mapView)
-    }
-    
-    @objc func onTapMinus() {
-        googleMapsService.getZoomOutValue(mapView: mapView)
     }
 }
 
-// MARK: - LocationService Delegate
-extension HomeViewController: CoreMotionServiceDelegate, LocationServiceProtocol  {
-    func getCurrentLocation(with location: CurrentLocationModel) {
-        let camera = GMSCameraPosition.camera(withLatitude: location.lat,
-                                              longitude:   location.lon,
-                                              zoom:         15.0)
-        
-        mapView.animate(to: camera)
-    }
-    
+extension HomeViewController: CoreMotionServiceDelegate {
     func getDetectableSpeedState(state: DetectableSpeed, rate: Double) {
         if state == .carIsDriving {
-            print("тут кочка")
-        } else {
-            print("тут ne кочка")
+            locationService.requestLocation(rate: rate)
         }
-      
     }
     
     func getCoordinateMotionDevice(with data: CoreMotionViewModel) {
@@ -206,3 +174,42 @@ extension HomeViewController: CoreMotionServiceDelegate, LocationServiceProtocol
     }
 }
 
+// MARK: - LocationService Delegate
+extension HomeViewController: LocationServiceProtocol {
+    func getCurrentLocation(with location: CurrentLocationModel) {
+        print("----------->", location.lat)
+        //
+        homeBuilder.addPinCoordinate(lat: location.lat, lon: location.lon, mapview: mapView)
+        
+        var currentDangerZone = DangerZoneModel(city: "Almaty",
+                                                latitude: location.lat,
+                                                longitude: location.lon,
+                                                danger_level: "1")
+
+        viewModel.postDangerZone(param: currentDangerZone)
+        let camera = GMSCameraPosition.camera(withLatitude: location.lat,
+                                              longitude:   location.lon,
+                                              zoom:         15.0)
+        
+        mapView.animate(to: camera)
+    }
+}
+
+extension HomeViewController {
+        func binding() {
+            viewModel.updateViewData = { [self] in
+                DispatchQueue.main.async {
+                    for element in self.viewModel.dangerList {
+                        self.homeBuilder.addPinCoordinate(lat: element.latitude,
+                                                          lon: element.longitude,
+                                                          mapview: self.mapView)
+                    }
+                }
+            }
+        }
+    
+    func fetchDangerList() {
+        viewModel.fetchDangerList()
+    }
+
+}

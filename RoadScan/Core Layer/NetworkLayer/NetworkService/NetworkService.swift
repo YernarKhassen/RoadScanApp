@@ -10,18 +10,30 @@ struct DangerZoneModel {
 
 struct DangerResult: Codable {
     var city: String
-    var latitude: Double?
-    var longitude: Double?
-    var danger_level: String?
+    var latitude: Double
+    var longitude: Double
+    var danger_level: String
     var id_station: Int
 }
 
+enum getDangerZoneResult{
+    case success(dangerZone: [DangerResult])
+    case failure(error: Error)
+}
+
+//enum getDangerZoneResultFromPost{
+//    case success(dangerZone: DangerResult)
+//    case failure(error: Error)
+//}
 
 protocol NetworkServiceProtocol {
     func postDangerZone(param: DangerZoneModel, comp: @escaping((DangerResult)-> ()))
 }
 
 final class NetworkService: NetworkServiceProtocol {
+    
+    let session = URLSession.shared
+    let decoder = JSONDecoder()
     
     func postDangerZone(param: DangerZoneModel, comp: @escaping ((DangerResult) -> ())) {
         guard let lat = param.latitude,
@@ -37,6 +49,8 @@ final class NetworkService: NetworkServiceProtocol {
             "danger_level": dangerLvl
         ] as [String : Any]
         
+        
+
         AF.request("https://stormy-badlands-01638.herokuapp.com/api/cracks/",
                    method: .post,
                    parameters: param,
@@ -46,9 +60,10 @@ final class NetworkService: NetworkServiceProtocol {
             case .success(let data):
                 do {
                     guard let data = data else {
+                        print("nosir")
                         return
                     }
-                    
+                    print("yessir")
                     let result = try JSONDecoder().decode(DangerResult.self, from: data)
                     comp(result)
                 } catch {
@@ -58,6 +73,36 @@ final class NetworkService: NetworkServiceProtocol {
                debugPrint(error)
             }
         }
+    }
+    
+
+    func getDangerZone(completion: @escaping(getDangerZoneResult) -> Void) {
+        
+        let url = URL(string: "https://stormy-badlands-01638.herokuapp.com/api/cracks/")!
+        
+        var request = URLRequest(url: url)
+        request.httpMethod = "GET"
+
+        session.dataTask(with: request) { [weak self] data, response, error in
+            var result: getDangerZoneResult
+            
+            guard let strongSelf = self else { return }
+            
+            if let data = data, error == nil{
+                guard let danger = try? strongSelf.decoder.decode( [DangerResult].self, from: data) else {
+                    print("no")
+                    print(data)
+                    print(response as Any)
+                    return }
+               
+                result = .success(dangerZone: danger)
+            }else{
+                result = .failure(error: error!)
+                print("erorororor")
+            }
+            completion(result)
+            
+        }.resume()
     }
 }
 

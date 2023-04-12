@@ -1,3 +1,10 @@
+//
+//  SegmentedControlExtension.swift
+//  InRoad
+//
+//  Created by Dinmukhamed on 19.02.2023.
+//
+
 import Foundation
 import UIKit
 extension UIImage{
@@ -12,7 +19,6 @@ extension UIImage{
         return rectangleImage!
     }
 }
-
 extension UISegmentedControl{
    
     func removeBorder(){
