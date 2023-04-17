@@ -23,7 +23,6 @@ protocol OnUpdateDangerList: AnyObject {
 
 final class HomeViewModel: HomeViewModelProtocol {
     
-    
     var updateViewData: (() -> ())?
     
     var notifyAboutDangerZone: (() -> ())?

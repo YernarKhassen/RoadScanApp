@@ -66,12 +66,7 @@ final class HomeViewController: UIViewController, AlertProtocol {
     
     private lazy var notificationAlert: UIAlertController = {
         let alert = UIAlertController(title: "Oh", message: "We got a pin", preferredStyle: .alert)
-        let okAction = UIAlertAction(title: "OK", style: .default)
-        { (action) in
-            
-        }
         
-        alert.addAction(okAction)
         present(alert, animated: true, completion: nil)
         return alert
     }()
@@ -83,18 +78,9 @@ final class HomeViewController: UIViewController, AlertProtocol {
         fetchDangerList()
     }
     
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
-        
-        
-        let camera = GMSCameraPosition.camera(withLatitude: 0.0,
-                                              longitude:   0.0,
-                                              zoom:         0)
-        mapView = GMSMapView.map(withFrame: view.frame,
-                                 camera: camera)
-        mapView.camera = camera
         
         self.view.addSubview(mapView)
         setup()
@@ -202,20 +188,14 @@ extension HomeViewController: CoreMotionServiceDelegate {
     }
     
     func getCoordinateMotionDevice(with data: CoreMotionViewModel) {
-        print("x ---------->", data.xPosition)
-        print("y ---------->", data.yPosition)
-        print("z----------->", data.zPosition)
     }
 }
 
 // MARK: - LocationService Delegate
 extension HomeViewController: LocationServiceProtocol {
     func getCurrentLocation(with location: CurrentLocationModel) {
-        print("----------->", location.lat)
-        //
-        homeBuilder.addPinCoordinate(lat: location.lat, lon: location.lon, mapview: mapView)
         
-        var currentDangerZone = DangerZoneModel(city: "Almaty",
+        let currentDangerZone = DangerZoneModel(city: "Almaty",
                                                 latitude: location.lat,
                                                 longitude: location.lon,
                                                 danger_level: "1")
@@ -243,10 +223,12 @@ extension HomeViewController {
     }
     func bindingNotification() {
         viewModel.notifyAboutDangerZone = { [self] in
-            DispatchQueue.main.async {
-                if !self.notificationAlert.isBeingPresented {
-                    self.present(notificationAlert, animated: true)
-                }
+            if !notificationAlert.isBeingPresented {
+                self.present(notificationAlert, animated: true)
+            }
+            
+            DispatchQueue.main.asyncAfter(deadline: .now() + 2.5) {
+                self.notificationAlert.dismiss(animated: true)
             }
             
         }

@@ -60,7 +60,14 @@ final class CoreMotionService {
                         let deltaTime = currentTime - self.lastUpdateTime
                         let acceleration = motion.userAcceleration.z
                         self.velocity = (acceleration * deltaTime)
-                        if(self.velocity > 0) && motion.userAcceleration.x > 0.2 {
+                        
+                        var x = motion.userAcceleration.x * motion.userAcceleration.x
+                        var y = motion.userAcceleration.y * motion.userAcceleration.x
+                        var z = motion.userAcceleration.x * motion.userAcceleration.x
+                        
+                       // var res = sqrt()
+                        
+                        if(self.velocity > 0) && motion.userAcceleration.x > 0.0004 || motion.userAcceleration.y > 1 || motion.userAcceleration.z > 0.0004 {
                             self.delegate?.getDetectableSpeedState(state: DetectableSpeed.carIsDriving, rate: motion.userAcceleration.x)
                         } else {
                             self.delegate?.getDetectableSpeedState(state : DetectableSpeed.carIsNotDriving, rate: -1)

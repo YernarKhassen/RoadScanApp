@@ -12,9 +12,9 @@ protocol GoogleMapsServiceDelegate {
 final class GoogleMapsService: GoogleMapsServiceDelegate {
     func setupMapView(view: UIView) -> GMSMapView {
         var mapView = GMSMapView()
-        let camera = GMSCameraPosition.camera(withLatitude: 0.0,
-                                              longitude:   0.0,
-                                              zoom:         15)
+        let camera = GMSCameraPosition.camera(withLatitude: 43.23757934570312,
+                                              longitude:   76.89624603023378,
+                                              zoom: 11)
         
         mapView = GMSMapView.map(withFrame: view.frame, camera: camera)
         mapView.camera = camera
