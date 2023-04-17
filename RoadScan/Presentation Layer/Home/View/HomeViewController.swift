@@ -16,7 +16,6 @@ final class HomeViewController: UIViewController, AlertProtocol {
     
     var mapView = GMSMapView()
     
-    /// need delete
     let items = ["Точки",
                  "Цветовые схемы"]
     
@@ -65,6 +64,18 @@ final class HomeViewController: UIViewController, AlertProtocol {
         return segControl
     }()
     
+    private lazy var notificationAlert: UIAlertController = {
+        let alert = UIAlertController(title: "Oh", message: "We got a pin", preferredStyle: .alert)
+        let okAction = UIAlertAction(title: "OK", style: .default)
+        { (action) in
+            
+        }
+        
+        alert.addAction(okAction)
+        present(alert, animated: true, completion: nil)
+        return alert
+    }()
+    
     override func loadView() {
         super.loadView()
         locationService.delegate = self
@@ -89,6 +100,7 @@ final class HomeViewController: UIViewController, AlertProtocol {
         setup()
         coreMotionService.speedDetecting()
         binding()
+        bindingNotification()
     }
     
     private func setup() {
@@ -104,7 +116,6 @@ final class HomeViewController: UIViewController, AlertProtocol {
         configureViewLayer()
     }
     
-    // нужно написать extetion
     private func configureViewLayer() {
         viewToSC.layer.masksToBounds = false
         viewToSC.layer.cornerRadius = 16
@@ -115,18 +126,17 @@ final class HomeViewController: UIViewController, AlertProtocol {
                                              blue: 0,
                                              alpha:0.15).cgColor
     }
-    
-    // нужно удалить метод или обьекти если не юзается
+
     private func setUpGoogleMaps(){
         mapView = googleMapsService.setupMapView(view: view)
         view.addSubview(mapView)
     }
-    // constraint не должны быть много чем 54
+
     private func makeConstraints() {
         viewToSC.snp.makeConstraints { make in
             make.top.equalToSuperview().inset(50)
             make.centerX.equalToSuperview()
-            make.width.equalTo(358)
+            make.width.equalTo(view.bounds.width - 30)
             make.height.equalTo(46)
         }
         
@@ -153,7 +163,6 @@ final class HomeViewController: UIViewController, AlertProtocol {
         }
     }
     
-    // создать extetion для view.addArangedSubviews []
     private func initialize() {
         [viewToSC, plusZoom, minusZoom, myLocation].forEach {
             view.addSubview($0)
@@ -173,7 +182,6 @@ final class HomeViewController: UIViewController, AlertProtocol {
     }
     
     @objc func showMyLocation() {
-        print("my location")
         googleMapsService.getMyCameraPosition(mapView: mapView)
     }
     
@@ -231,6 +239,16 @@ extension HomeViewController {
                                                       mapview: self.mapView)
                 }
             }
+        }
+    }
+    func bindingNotification() {
+        viewModel.notifyAboutDangerZone = { [self] in
+            DispatchQueue.main.async {
+                if !self.notificationAlert.isBeingPresented {
+                    self.present(notificationAlert, animated: true)
+                }
+            }
+            
         }
     }
     

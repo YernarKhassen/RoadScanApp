@@ -51,7 +51,7 @@ final class NetworkService: NetworkServiceProtocol {
         
         
 
-        AF.request("https://stormy-badlands-01638.herokuapp.com/api/cracks/",
+        AF.request("https://gentle-harbor-31655.herokuapp.com/api/cracks/ones",
                    method: .post,
                    parameters: param,
                    encoding: URLEncoding.default).response { response in
@@ -78,7 +78,7 @@ final class NetworkService: NetworkServiceProtocol {
 
     func getDangerZone(completion: @escaping(getDangerZoneResult) -> Void) {
         
-        let url = URL(string: "https://stormy-badlands-01638.herokuapp.com/api/cracks/")!
+        let url = URL(string: "https://gentle-harbor-31655.herokuapp.com/api/cracks/ones")!
         
         var request = URLRequest(url: url)
         request.httpMethod = "GET"
