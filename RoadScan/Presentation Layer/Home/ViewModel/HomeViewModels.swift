@@ -8,7 +8,7 @@
 import Foundation
 
 protocol HomeViewModelInput {
-//    var dangerList = [DangerResult]() { get set }
+    var dangerList: [DangerResult] { get set }
 }
 
 protocol HomeViewModelOutput {
@@ -26,6 +26,8 @@ final class HomeViewModel: HomeViewModelProtocol {
     
     var updateViewData: (() -> ())?
     
+    var notifyAboutDangerZone: (() -> ())?
+    
     var dangerList = [DangerResult]()
     
     weak var delegate: OnUpdateDangerList?
@@ -38,14 +40,7 @@ final class HomeViewModel: HomeViewModelProtocol {
 }
 
 extension HomeViewModel {
-//    func fetchDangerList(detail: DangerZoneModel) {
-//        networkService.postDangerZone(param: detail) { [weak self] (result) in
-//            guard let self = self else { return }
-//
-//            self.dangerList = result
-//            self.delegate?.didUpdateDangerList()
-//        }
-//    }
+
     func fetchDangerList() {
         networkService.getDangerZone { [weak self] (result) in
             switch result{
@@ -59,11 +54,13 @@ extension HomeViewModel {
     }
     
     func postDangerZone(param: DangerZoneModel) {
+        self.notifyAboutDangerZone?()
         networkService.postDangerZone(param: param) { DangerResult in
-            self.dangerList.append(DangerResult)
-            self.updateViewData?()
-
+//            self.dangerList.append(DangerResult)
+//            self.updateViewData?()
+            
         }
+        
     }
     
 }
