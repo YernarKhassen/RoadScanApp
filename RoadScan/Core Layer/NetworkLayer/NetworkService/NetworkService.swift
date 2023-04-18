@@ -51,7 +51,7 @@ final class NetworkService: NetworkServiceProtocol {
         
         
 
-        AF.request("https://gentle-harbor-31655.herokuapp.com/api/cracks/ones",
+        AF.request("https://gentle-harbor-31655.herokuapp.com/api/cracks/",
                    method: .post,
                    parameters: param,
                    encoding: URLEncoding.default).response { response in
@@ -78,7 +78,7 @@ final class NetworkService: NetworkServiceProtocol {
 
     func getDangerZone(completion: @escaping(getDangerZoneResult) -> Void) {
         
-        let url = URL(string: "https://gentle-harbor-31655.herokuapp.com/api/cracks/ones")!
+        let url = URL(string: "https://gentle-harbor-31655.herokuapp.com/api/cracks")!
         
         var request = URLRequest(url: url)
         request.httpMethod = "GET"
@@ -86,13 +86,12 @@ final class NetworkService: NetworkServiceProtocol {
         session.dataTask(with: request) { [weak self] data, response, error in
             var result: getDangerZoneResult
             
+            debugPrint(data as Any)
+            
             guard let strongSelf = self else { return }
             
             if let data = data, error == nil{
                 guard let danger = try? strongSelf.decoder.decode( [DangerResult].self, from: data) else {
-                    print("no")
-                    print(data)
-                    print(response as Any)
                     return }
                
                 result = .success(dangerZone: danger)

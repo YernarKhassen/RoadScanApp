@@ -47,7 +47,7 @@ final class LocationService: NSObject {
     }
     
     func requestToAccess() {
-        locationManager.requestWhenInUseAuthorization()
+        locationManager.requestAlwaysAuthorization()
     }
 }
 
@@ -56,6 +56,8 @@ extension LocationService: CLLocationManagerDelegate {
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         locationManager.stopMonitoringSignificantLocationChanges()
         let locationValue:CLLocationCoordinate2D = manager.location!.coordinate
+        
+        
         
         delegate?.getCurrentLocation(with: .init(lat: locationValue.latitude, lon: locationValue.longitude))
         
