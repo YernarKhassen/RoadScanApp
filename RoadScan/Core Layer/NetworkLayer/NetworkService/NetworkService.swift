@@ -27,7 +27,7 @@ enum getDangerZoneResult{
 //}
 
 protocol NetworkServiceProtocol {
-    func postDangerZone(param: DangerZoneModel, comp: @escaping((DangerResult)-> ()))
+    func postDangerZone(param: DangerZoneModel, comp: @escaping((DangerResult?)-> ()))
 }
 
 final class NetworkService: NetworkServiceProtocol {
@@ -35,7 +35,7 @@ final class NetworkService: NetworkServiceProtocol {
     let session = URLSession.shared
     let decoder = JSONDecoder()
     
-    func postDangerZone(param: DangerZoneModel, comp: @escaping ((DangerResult) -> ())) {
+    func postDangerZone(param: DangerZoneModel, comp: @escaping ((DangerResult?) -> ())) {
         guard let lat = param.latitude,
               let lon = param.longitude,
               let dangerLvl = param.danger_level else {
@@ -67,7 +67,7 @@ final class NetworkService: NetworkServiceProtocol {
                     let result = try JSONDecoder().decode(DangerResult.self, from: data)
                     comp(result)
                 } catch {
-                    print(error.localizedDescription)
+                    comp(nil)
                 }
             case .failure(let error):
                debugPrint(error)
@@ -76,31 +76,28 @@ final class NetworkService: NetworkServiceProtocol {
     }
     
 
-    func getDangerZone(completion: @escaping(getDangerZoneResult) -> Void) {
+    func getDangerZone(completion: @escaping([DangerResult]?) -> Void) {
         
-        let url = URL(string: "https://gentle-harbor-31655.herokuapp.com/api/cracks")!
-        
-        var request = URLRequest(url: url)
-        request.httpMethod = "GET"
-
-        session.dataTask(with: request) { [weak self] data, response, error in
-            var result: getDangerZoneResult
+        AF.request("https://gentle-harbor-31655.herokuapp.com/api/cracks/", method: .get, encoding: JSONEncoding.default).response { result in
             
-            guard let strongSelf = self else { return }
+            debugPrint(result)
             
-            if let data = data, error == nil{
-                guard let danger = try? strongSelf.decoder.decode( [DangerResult].self, from: data) else {
-                    return }
-                
-                print("------------>", danger)
-               
-                result = .success(dangerZone: danger)
-            } else {
-                result = .failure(error: error!)
+            switch result.result {
+            case let .success(data):
+                do {
+                    guard let data = data else {
+                        return
+                    }
+                    
+                    let result = try JSONDecoder().decode([DangerResult].self, from: data)
+                    completion(result)
+                } catch {
+                    completion(nil)
+                }
+            case .failure(_):
+                completion(nil)
             }
-            completion(result)
-            
-        }.resume()
+        }
     }
 }
 

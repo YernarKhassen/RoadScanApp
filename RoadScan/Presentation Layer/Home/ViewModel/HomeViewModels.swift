@@ -42,19 +42,15 @@ extension HomeViewModel {
 
     func fetchDangerList() {
         networkService.getDangerZone { [weak self] (result) in
-            switch result{
-            case .success(let danger):
-                self?.dangerList = danger
-                self?.updateViewData?()
-            case .failure(let error):
-                print(error.localizedDescription)
-            }
+            self?.dangerList = result ?? []
+            self?.updateViewData?()
         }
     }
     
-    func postDangerZone(param: DangerZoneModel) {
+    func postDangerZone(param: DangerZoneModel, callback: @escaping(() -> ())) {
         networkService.postDangerZone(param: param) { DangerResult in
             self.fetchDangerList()
+            callback()
         }
     }
 }

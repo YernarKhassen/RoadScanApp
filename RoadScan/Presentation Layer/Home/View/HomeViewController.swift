@@ -86,7 +86,6 @@ final class HomeViewController: UIViewController, AlertProtocol {
         setup()
         coreMotionService.speedDetecting()
         binding()
-        bindingNotification()
     }
     
     private func setup() {
@@ -102,22 +101,19 @@ final class HomeViewController: UIViewController, AlertProtocol {
                                                     danger_level: "1")
             print("-------------------->", (mapView.myLocation?.coordinate.longitude ?? 0.0) as Double)
             
-//            if !notificationAlert.isBeingPresented {
-//                self.present(notificationAlert, animated: true) {
-//                    DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-//                        if !self.notificationAlert.isBeingDismissed {
-//                            self.notificationAlert.dismiss(animated: true)
-//                        }
-//                    }
-//                }
-//            }
             
-            viewModel.postDangerZone(param: currentDangerZone)
-            let camera = GMSCameraPosition.camera(withLatitude: mapView.myLocation?.coordinate.latitude ?? 0.0,
-                                                  longitude:   mapView.myLocation?.coordinate.longitude ?? 0.0,
-                                                  zoom:         15.0)
-            
-            mapView.animate(to: camera)
+            viewModel.postDangerZone(param: currentDangerZone) { [weak self] in
+                guard let self = self else { return }
+                self.callLocalNotification(descption: "Oh, we got a pin", time: 1.5)
+                
+                
+                let camera = GMSCameraPosition.camera(withLatitude: self.mapView.myLocation?.coordinate.latitude ?? 0.0,
+                                                      longitude:   self.mapView.myLocation?.coordinate.longitude ?? 0.0,
+                                                      zoom:         15.0)
+                
+                
+                self.mapView.animate(to: camera)
+            }
         }
     }
     
@@ -233,11 +229,6 @@ extension HomeViewController {
                                                       mapview: self.mapView)
                 }
             }
-        }
-    }
-    func bindingNotification() {
-        viewModel.notifyAboutDangerZone = { [self] in
-
         }
     }
     

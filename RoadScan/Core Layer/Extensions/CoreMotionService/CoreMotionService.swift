@@ -69,7 +69,7 @@ final class CoreMotionService {
                         
                         let res = sqrt((x*x) + (y*y) + (z*z))
                         
-                        if res < 1.5 && res > 0.5 {
+                        if res < 1 && res > 0.2 {
                             carIsDrivingStart?()
                         }
                     }
