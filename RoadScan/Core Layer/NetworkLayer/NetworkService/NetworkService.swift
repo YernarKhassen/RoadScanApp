@@ -86,18 +86,17 @@ final class NetworkService: NetworkServiceProtocol {
         session.dataTask(with: request) { [weak self] data, response, error in
             var result: getDangerZoneResult
             
-            debugPrint(data as Any)
-            
             guard let strongSelf = self else { return }
             
             if let data = data, error == nil{
                 guard let danger = try? strongSelf.decoder.decode( [DangerResult].self, from: data) else {
                     return }
+                
+                print("------------>", danger)
                
                 result = .success(dangerZone: danger)
-            }else{
+            } else {
                 result = .failure(error: error!)
-                print("erorororor")
             }
             completion(result)
             

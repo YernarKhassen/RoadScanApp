@@ -94,7 +94,31 @@ final class HomeViewController: UIViewController, AlertProtocol {
         initialize()
         makeConstraints()
         coreMotionService.startMotion()
-        coreMotionService.delegate = self
+        
+        coreMotionService.carIsDrivingStart = { [self] in
+            let currentDangerZone = DangerZoneModel(city: "Almaty",
+                                                    latitude: mapView.myLocation?.coordinate.latitude,
+                                                    longitude: mapView.myLocation?.coordinate.longitude,
+                                                    danger_level: "1")
+            print("-------------------->", (mapView.myLocation?.coordinate.longitude ?? 0.0) as Double)
+            
+//            if !notificationAlert.isBeingPresented {
+//                self.present(notificationAlert, animated: true) {
+//                    DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+//                        if !self.notificationAlert.isBeingDismissed {
+//                            self.notificationAlert.dismiss(animated: true)
+//                        }
+//                    }
+//                }
+//            }
+            
+            viewModel.postDangerZone(param: currentDangerZone)
+            let camera = GMSCameraPosition.camera(withLatitude: mapView.myLocation?.coordinate.latitude ?? 0.0,
+                                                  longitude:   mapView.myLocation?.coordinate.longitude ?? 0.0,
+                                                  zoom:         15.0)
+            
+            mapView.animate(to: camera)
+        }
     }
     
     override func viewDidLayoutSubviews() {
@@ -183,7 +207,7 @@ final class HomeViewController: UIViewController, AlertProtocol {
 extension HomeViewController: CoreMotionServiceDelegate {
     func getDetectableSpeedState(state: DetectableSpeed, rate: Double) {
         if state == .carIsDriving {
-            locationService.requestLocation(rate: rate)
+           
         }
     }
     
@@ -195,17 +219,7 @@ extension HomeViewController: CoreMotionServiceDelegate {
 extension HomeViewController: LocationServiceProtocol {
     func getCurrentLocation(with location: CurrentLocationModel) {
         
-        let currentDangerZone = DangerZoneModel(city: "Almaty",
-                                                latitude: location.lat,
-                                                longitude: location.lon,
-                                                danger_level: "1")
-        
-        viewModel.postDangerZone(param: currentDangerZone)
-        let camera = GMSCameraPosition.camera(withLatitude: location.lat,
-                                              longitude:   location.lon,
-                                              zoom:         15.0)
-        
-        mapView.animate(to: camera)
+
     }
 }
 
@@ -223,14 +237,7 @@ extension HomeViewController {
     }
     func bindingNotification() {
         viewModel.notifyAboutDangerZone = { [self] in
-            if !notificationAlert.isBeingPresented {
-                self.present(notificationAlert, animated: true)
-            }
-            
-            DispatchQueue.main.asyncAfter(deadline: .now() + 2.5) {
-                self.notificationAlert.dismiss(animated: true)
-            }
-            
+
         }
     }
     

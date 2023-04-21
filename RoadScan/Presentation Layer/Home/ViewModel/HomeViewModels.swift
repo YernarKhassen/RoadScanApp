@@ -53,13 +53,8 @@ extension HomeViewModel {
     }
     
     func postDangerZone(param: DangerZoneModel) {
-        self.notifyAboutDangerZone?()
         networkService.postDangerZone(param: param) { DangerResult in
-//            self.dangerList.append(DangerResult)
-//            self.updateViewData?()
-            
+            self.fetchDangerList()
         }
-        
     }
-    
 }

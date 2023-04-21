@@ -29,6 +29,8 @@ final class CoreMotionService {
     let motionQueue = OperationQueue()
     var lastUpdateTime: TimeInterval = 0
     var velocity: Double = 0
+    
+    var carIsDrivingStart: (() -> ())?
 
     
     weak var delegate: CoreMotionServiceDelegate?
@@ -61,16 +63,14 @@ final class CoreMotionService {
                         let acceleration = motion.userAcceleration.z
                         self.velocity = (acceleration * deltaTime)
                         
-                        var x = motion.userAcceleration.x * motion.userAcceleration.x
-                        var y = motion.userAcceleration.y * motion.userAcceleration.x
-                        var z = motion.userAcceleration.x * motion.userAcceleration.x
+                        let x = motion.userAcceleration.x * motion.userAcceleration.x
+                        let y = motion.userAcceleration.y * motion.userAcceleration.x
+                        let z = motion.userAcceleration.x * motion.userAcceleration.x
                         
-                       // var res = sqrt()
+                        let res = sqrt((x*x) + (y*y) + (z*z))
                         
-                        if(self.velocity > 0) && motion.userAcceleration.x > 0.0004 || motion.userAcceleration.y > 1 || motion.userAcceleration.z > 0.0004 {
-                            self.delegate?.getDetectableSpeedState(state: DetectableSpeed.carIsDriving, rate: motion.userAcceleration.x)
-                        } else {
-                            self.delegate?.getDetectableSpeedState(state : DetectableSpeed.carIsNotDriving, rate: -1)
+                        if res < 1.5 && res > 0.5 {
+                            carIsDrivingStart?()
                         }
                     }
                     
