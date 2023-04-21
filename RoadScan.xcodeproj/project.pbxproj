@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1D78D60B29F2E4C900954EE0 /* UIViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D78D60A29F2E4C900954EE0 /* UIViewController.swift */; };
 		7005AFA529A69ED400ABEB66 /* TypographyFonts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7005AFA429A69ED400ABEB66 /* TypographyFonts.swift */; };
 		7005AFA929A7E5A300ABEB66 /* String.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7005AFA829A7E5A300ABEB66 /* String.swift */; };
 		7005AFAD29A7E66700ABEB66 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 7005AFAF29A7E66700ABEB66 /* Localizable.strings */; };
@@ -52,6 +53,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		1D78D60A29F2E4C900954EE0 /* UIViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewController.swift; sourceTree = "<group>"; };
 		7005AFA429A69ED400ABEB66 /* TypographyFonts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TypographyFonts.swift; sourceTree = "<group>"; };
 		7005AFA829A7E5A300ABEB66 /* String.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = String.swift; sourceTree = "<group>"; };
 		7005AFAE29A7E66700ABEB66 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -164,6 +166,7 @@
 				7005AFB929ABF15600ABEB66 /* Foundation */,
 				7005AFB829AB43B200ABEB66 /* UIKit */,
 				7005AFBA29AC92A600ABEB66 /* RSAssets.swift */,
+				1D78D60A29F2E4C900954EE0 /* UIViewController.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -632,6 +635,7 @@
 				7019C63E299531D500E9379E /* AppDelegate.swift in Sources */,
 				D97A239429D1E1D800B8AB0A /* SettingsViewController.swift in Sources */,
 				D97A239D29D1E20900B8AB0A /* LocationService.swift in Sources */,
+				1D78D60B29F2E4C900954EE0 /* UIViewController.swift in Sources */,
 				70A1F70D29E757D7002FDC29 /* MainBuilder.swift in Sources */,
 				B9BE4DE229E1A2FB009C2D02 /* HomeViewModels.swift in Sources */,
 				708E1A8B29981AC500164E9A /* OnBoardingViewController+Section.swift in Sources */,

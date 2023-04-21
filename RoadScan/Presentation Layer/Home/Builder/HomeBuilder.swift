@@ -27,18 +27,12 @@ final class HomeBuilder: HomeBuilderInputProtocol, HomeBuilderOutputProtocol {
     private let array = ["redCircle", "brownCircle", "greenCircle"]
     
     func getStackOfPins() -> [PinViewModel] {
-        stackOfPins.append(.init(latitude: 43.238949, longitude: 76.945451, nameOfLocation: "Republic Square"))
-        stackOfPins.append(.init(latitude: 43.222278, longitude: 76.947694, nameOfLocation: "Koktobe Hill"))
-        stackOfPins.append(.init(latitude: 43.256942, longitude: 76.943367, nameOfLocation: "Zenkov Cathedral"))
-        stackOfPins.append(.init(latitude: 43.175478, longitude: 77.049082, nameOfLocation: "Medeu Skating Rink"))
-        
         return stackOfPins
     }
     
     func addPinCoordinate(lat : Double, lon : Double, mapview : GMSMapView) {
         stackOfPins.append(.init(latitude: lat , longitude: lon, nameOfLocation: "unknown"))
         setPins(with: mapview)
-        
     }
     
     // MARK: - Adema ozegertedy

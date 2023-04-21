@@ -2,7 +2,7 @@ import UIKit
 import GoogleMaps
 
 @main
-class AppDelegate: UIResponder, UIApplicationDelegate {
+class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterDelegate {
     
     var window: UIWindow?
     
@@ -17,6 +17,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         window?.makeKeyAndVisible()
         
         checkForFirstLaunching()
+        
+        setupNotifications(application)
         
         return true
     }
@@ -35,5 +37,27 @@ extension AppDelegate {
         }
         
         window?.rootViewController = navigationController
+    }
+    
+    private func setupNotifications(_ application: UIApplication) {
+        UNUserNotificationCenter.current().delegate = self
+        let authOptions: UNAuthorizationOptions = [.alert, .sound]
+        UNUserNotificationCenter.current().requestAuthorization(options: authOptions) { _, _ in
+            print(#function)
+        }
+        application.registerForRemoteNotifications()
+    }
+}
+
+extension AppDelegate {
+    
+    func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
+        completionHandler([.alert, .sound])
+        let _ = notification.request.content.userInfo
+        print(#function)
+    }
+    
+    func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
+        print(#function)
     }
 }
