@@ -15,30 +15,18 @@ private protocol HomeBuilderInputProtocol {
 protocol HomeBuilderOutputProtocol {
     func getStackOfPins() -> [PinViewModel]
     func makePathCoordinates() -> [CLLocationCoordinate2D]
-    func drawCoordinates(with mapView: GMSMapView)
-    func setPins(with mapView: GMSMapView)
 }
-
-
-
 
 final class HomeBuilder: HomeBuilderInputProtocol, HomeBuilderOutputProtocol {
     fileprivate var stackOfPins: [PinViewModel] = []
-    private let array = ["redCircle", "brownCircle", "greenCircle"]
     
     func getStackOfPins() -> [PinViewModel] {
-        stackOfPins.append(.init(latitude: 43.238949, longitude: 76.945451, nameOfLocation: "Republic Square"))
-        stackOfPins.append(.init(latitude: 43.222278, longitude: 76.947694, nameOfLocation: "Koktobe Hill"))
-        stackOfPins.append(.init(latitude: 43.256942, longitude: 76.943367, nameOfLocation: "Zenkov Cathedral"))
-        stackOfPins.append(.init(latitude: 43.175478, longitude: 77.049082, nameOfLocation: "Medeu Skating Rink"))
-        
         return stackOfPins
     }
     
-    func addPinCoordinate(lat : Double, lon : Double, mapview : GMSMapView) {
+    func addPinCoordinate(lat : Double, lon : Double, mapview: GMSMapView, dangerLevel: DangerLvlState) {
         stackOfPins.append(.init(latitude: lat , longitude: lon, nameOfLocation: "unknown"))
-        setPins(with: mapview)
-        
+        setPins(with: mapview, with: dangerLevel)
     }
     
     // MARK: - Adema ozegertedy
@@ -52,18 +40,43 @@ final class HomeBuilder: HomeBuilderInputProtocol, HomeBuilderOutputProtocol {
         return coordinate
     }
     
-    func drawCoordinates(with mapView: GMSMapView) {
-        let path = GMSMutablePath()
-        makePathCoordinates().forEach { path.add($0) }
-        let polyline = createPolyline(from: path, with: .red, and: 5)
-        polyline.map = mapView
-    }
+    // MARK: - для будущее
+//    func drawCoordinates(with mapView: GMSMapView) {
+//        let path = GMSMutablePath()
+//        makePathCoordinates().forEach { path.add($0) }
+//        let polyline = createPolyline(from: path, with: .red, and: 5)
+//        polyline.map = mapView
+//    }
     
-    func setPins(with mapView: GMSMapView) {
-        getStackOfPins().forEach {
-            addMarker(to: mapView, at: $0.latitude, and: $0.longitude, with: $0.nameOfLocation)
+    func setPins(with mapView: GMSMapView, with state: DangerLvlState) {
+        for location in stackOfPins {
+            switch state {
+            case .low:
+                addMarker(to: mapView,
+                          at: location.latitude,
+                          and: location.longitude,
+                          with: location.nameOfLocation,
+                          dangerImageName: "greenCircle")
+            case .medium:
+                addMarker(to: mapView,
+                          at: location.latitude,
+                          and: location.longitude,
+                          with: location.nameOfLocation,
+                          dangerImageName: "brownCircle")
+            case .hight:
+                addMarker(to: mapView,
+                          at: location.latitude,
+                          and: location.longitude,
+                          with: location.nameOfLocation,
+                          dangerImageName: "redCircle")
+            }
         }
     }
+    
+    func buildDangerZoneInputModel(model: DangerZoneInputModel) -> DangerZoneInputModel {
+        return model
+    }
+    
     private func createPolyline(from path: GMSMutablePath, with strokeColor: UIColor, and strokeWidth: CGFloat) -> GMSPolyline {
         let polyline = GMSPolyline(path: path)
         polyline.strokeColor = strokeColor
@@ -74,16 +87,17 @@ final class HomeBuilder: HomeBuilderInputProtocol, HomeBuilderOutputProtocol {
 
 // MARK: - add marker for adding pins for map
 extension HomeBuilder {
-    private func addMarker(to mapView: GMSMapView, at latitude: CLLocationDegrees, and longitude: CLLocationDegrees, with title: String) {
+    private func addMarker(to mapView: GMSMapView,
+                           at latitude: CLLocationDegrees,
+                           and longitude: CLLocationDegrees,
+                           with title: String,
+                           dangerImageName: String) {
         let marker = GMSMarker()
         marker.position = CLLocationCoordinate2D(latitude: latitude, longitude: longitude)
         marker.title = title
-        let imageView = UIImageView(image: UIImage(named: "redCircle"))
+        let imageView = UIImageView(image: UIImage(named: dangerImageName))
                 imageView.frame = CGRect(x: 0, y: 0, width: 15, height: 15)
         marker.iconView = imageView
         marker.map = mapView
     }
-    
-    
-    
 }

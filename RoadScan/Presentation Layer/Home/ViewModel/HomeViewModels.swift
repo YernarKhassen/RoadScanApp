@@ -29,11 +29,15 @@ final class HomeViewModel: HomeViewModelProtocol {
     
     var dangerList = [DangerResult]()
     
+    var countOfPins = 0
+    
     weak var delegate: OnUpdateDangerList?
     
     private let networkService: NetworkService
     
-    init(networkService: NetworkService = NetworkService()) {
+    // MARK: - Dispatch objects
+    
+    init(networkService: NetworkService = NetworkServiceImpl()) {
         self.networkService = networkService
     }
 }
@@ -41,25 +45,31 @@ final class HomeViewModel: HomeViewModelProtocol {
 extension HomeViewModel {
 
     func fetchDangerList() {
-        networkService.getDangerZone { [weak self] (result) in
-            switch result{
-            case .success(let danger):
-                self?.dangerList = danger
+        networkService.getDangerZone { [weak self] (response) in
+            switch response {
+            case let .success(result):
+                self?.dangerList = result
                 self?.updateViewData?()
-            case .failure(let error):
-                print(error.localizedDescription)
+            case .failure(_):
+                break
             }
         }
     }
     
-    func postDangerZone(param: DangerZoneModel) {
-        self.notifyAboutDangerZone?()
-        networkService.postDangerZone(param: param) { DangerResult in
-//            self.dangerList.append(DangerResult)
-//            self.updateViewData?()
-            
+    func checkingForPinCount(callback: @escaping(() -> Void)) {
+        countOfPins += 1
+        
+        if countOfPins < 2 {
+            return
         }
         
+        countOfPins = 0
+        callback()
     }
     
+    func postDangerZone(param: DangerZoneInputModel) {
+        networkService.postDangerZone(param: param) { model in
+        
+        }
+    }
 }
